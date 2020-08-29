@@ -1,0 +1,155 @@
+{% extends 'store/main.html' %}
+{% load static %}
+
+{% block title %} Store {% endblock title %}
+
+{% block body %}
+<div class="row " style="height: 320px;">
+    <div class="col-lg-6">
+        <div class="box-element" id="form-wrapper">
+
+            <br>
+            <div class="box-element hidden" id="payment-info"><small>Paypal option</small></div>
+            <form id="form">
+                <div id="user-info">
+
+                </div>
+                <div id="shopping-info">
+                    <div id="user-info">
+                        <p>Enter your details: </p>
+                        <hr>
+                        <div class="form-field">
+                            <input type="text" required class="form-control" placeholder="Name" name="name">
+                        </div>
+                        <div class="form-field">
+                            <input type="email" required class="form-control" placeholder="email" name="email">
+                        </div>
+                        <hr>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+    <div class="col-lg-6">
+        <div class="box-element">
+            <form id="form">
+                <div id="shipping-info">
+                    <hr>
+                    <p>Shipping Information: </p>
+                    <hr>
+                    <div class="form-field">
+                        <input type="text" class="form-control" name="address" placeholder="Address">
+                    </div>
+                    <div class="form-field">
+                        <input type="text" class="form-control" name="city" placeholder="city">
+                    </div>
+                    <div class="form-field">
+                        <input type="text" class="form-control" name="state" placeholder="state">
+                    </div>
+                    <div class="form-field">
+                        <input type="text" class="form-control" name="pin" placeholder="Pin Code">
+                    </div>
+                </div>
+                <hr>
+        </div>
+        </form>
+    </div>
+    <div id="submit1" class="container my-3">
+        <input type="submit" id="form-button" class="btn btn-success btn-block" value="Continue">
+        <br>
+        <div class="box-element hidden text-center" id="payment-info"><small>Paypal option</small></div>
+        <button id="make-payment">Make Payment</button>
+    </div>
+</div>
+<div class="container col-lg-6 ">
+    <div class="box-element" style="height: 390px; width: 620px;">
+        <div class="form-element">
+            <h3>Order Summary</h3>
+            <hr>
+            {% for item in items %}
+            <div class="cart-row">
+                <div style="flex: 2;"><img src="{{item.product.imageURL}}" alt="" class="row-image"></div>
+                <div style="flex: 2;">
+                    <p>{{item.product.name}}</p>
+                </div>
+                <div style="flex: 1;">&#x20B9; {{item.product.price|floatformat:2}}</div>
+                <div style="flex: 1;">{{item.quantity}}</div>
+            </div>
+            {% endfor %}
+            <h5>Item: {{order.get_cart_item}}</h5>
+            <h5>Total: {{order.get_cart_total|floatformat:2}}</h5>
+        </div>
+        <hr>
+        <a href="{% url 'cart' %}" class="btn btn-dark">Back to cart</a>
+    </div>
+
+</div>
+
+<!-- <script text="text/javascript">
+    var shipping = '{{order.shipping}}'
+    var total = '{{order.get_cart_total|floatformat:2}}'
+
+    if (shipping == 'False') {
+        document.getElementById('shipping-info').innerHTML = ''
+    }
+    console.log('shipping executed')
+
+    var form = document.getElementById('submit1')
+    form.addEventListener('submit', function (e) {
+        e.preventDefault
+        console.log('form Submitted..')
+        document.getElementById('form-button').classList.add('hidden')
+        document.getElementById('payment-info').classList.remove('hidden')
+
+    })
+
+    document.getElementById('make-payment').addEventListener('click', function (e) {
+        submitFormData()
+    })
+    function submitFormData() {
+        console.log('payment button clicked')
+
+        var userFormData = {
+            'name': null,
+            'email':null,
+            'total': total
+        }
+
+        var shippingInfo = {
+            'address': null,
+            'city': null,
+            'state': null,
+            'pin': null,
+        }
+        if (shipping != 'False') {
+            shippingInfo.address = form.address.value
+            shippingInfo.city = form.city.value
+            shippingInfo.state = form.state.value
+            shippingInfo.pin = form.pin.value
+        }
+        if (user == 'AnonymousUser') {
+            shippingInfo.name = form.name.value
+            shippingInfo.email = form.email.value
+        }
+
+        var url = '/processorder'
+
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken,
+        },
+        body: JSON.stringify({ 'form': userFormData, 'shipping': shippingInfo })
+    })
+    .then((response) =>response.json())
+    .then((data) => {
+        console.log('success data:', data)
+        alert('Transcation Complete')
+        window.location.href = "{% url 'store' %}"
+    })
+    }
+</script> -->
+
+{% endblock body %}
